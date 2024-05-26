@@ -7,4 +7,4 @@
     </aura:html>
 
     <c:qwilEmbed></c:qwilEmbed>
-</aura:component>	
+</aura:component>
