@@ -33,10 +33,6 @@ export default class QwilEmbed extends LightningElement {
             token,
             endpoint,
             targetElement: container,
-            options: {
-                // TODO: remove this custom URL when prod endpoint released
-                customUrl: 'https://sdk-beta.qwil.network/',
-            },
             onLoad: (api) => {
                 console.log('Qwil login successful'); 
                 this.loaded = true;
