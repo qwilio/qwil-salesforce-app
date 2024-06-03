@@ -33,9 +33,20 @@ export default class QwilEmbed extends LightningElement {
             options: {
                 customUrl: 'https://sdk-beta.qwil.network/',
             },
-            onLoad: () => {
-                console.log('Qwil login successful'); // TODO: register auth-expired handler
+            onLoad: (api) => {
+                console.log('Qwil login successful'); 
                 this.loaded = true;
+
+                // Handle auth expiry while app is rendered
+                api.on('auth-expired', async (payload) => {
+                    console.warn('Qwil session expired. Reauthenticating.'); 
+
+                    await this.retrieveCredentials();
+                    if (!this.error) {
+                        const { token, endpoint } = this.credentials;
+                        api.reauthenticate({ token, endpoint });
+                    }
+                });
             },
             onError: () => {
                 console.error('Qwil login failed'); // TODO: error handling
