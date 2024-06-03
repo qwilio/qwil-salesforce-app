@@ -1,4 +1,5 @@
 import { LightningElement } from 'lwc';
+import Toast from 'lightning/toast';
 import { loadScript } from "lightning/platformResourceLoader";
 import QwilApiLib from "@salesforce/resourceUrl/QwilApiLib";
 import authenticate from '@salesforce/apex/QwilSdkAuth.authenticate';
@@ -18,12 +19,14 @@ export default class QwilEmbed extends LightningElement {
         
         const container = this.template.querySelector('div.qwil-container');
 
+        // Handle case where we fail to get SDK token from Apex call
         if (this.error) {
             container.classList.remove('full-page');
             this.loaded = true;
             return;
         } 
 
+        // If no error, credentials should have been populated
         const { token, endpoint } = this.credentials;
 
         this.api = new window.QwilApi({
@@ -31,6 +34,7 @@ export default class QwilEmbed extends LightningElement {
             endpoint,
             targetElement: container,
             options: {
+                // TODO: remove this custom URL when prod endpoint released
                 customUrl: 'https://sdk-beta.qwil.network/',
             },
             onLoad: (api) => {
@@ -47,9 +51,15 @@ export default class QwilEmbed extends LightningElement {
                         api.reauthenticate({ token, endpoint });
                     }
                 });
+
+                // Display in-app error events as toast
+                api.on('app-error', ({message}) => {
+                    this.showErrorToast(message);
+                })
             },
+            // Handle error case where we have token from Apex call, but we fail to load Qwil using said token.
             onError: () => {
-                console.error('Qwil login failed'); // TODO: error handling
+                this.error = 'Login to Qwil failed'
                 this.loaded = true;
             },
         });
@@ -60,7 +70,7 @@ export default class QwilEmbed extends LightningElement {
             this.credentials = await authenticate();
         } catch (error) {
             console.error(error);
-            this.error = error;
+            this.error = error?.body?.message || "Load failed";
         }
     }
 
@@ -71,4 +81,12 @@ export default class QwilEmbed extends LightningElement {
         }
     }
 
+    showErrorToast(message) {
+        Toast.show({
+            label: 'Qwil Chat',
+            message,
+            mode: 'dismissable',
+            variant: 'warning'
+        }, this);
+    }
 }
