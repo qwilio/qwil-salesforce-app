@@ -1,8 +1,24 @@
 <template>
-    <div class='qwil-container' lwc:dom="manual"></div>
     <template if:false={loaded}>
-        <div class='qwil-loading'>
+        <div class='qwil-loading full-page'>
             <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
         </div>
     </template>
+    <template if:true={error}>
+        <lightning-layout vertical-align="center" horizontal-align="center" class="full-page">
+            <div class="slds-size_large">
+                <lightning-card>
+                    <div class="slds-align_absolute-center" style="height:7rem; flex-direction: column">
+                        <div>
+                            <lightning-icon icon-name="utility:warning" alternative-text="Error" title="Error" class="error-icon"></lightning-icon>
+                        </div>
+                        <div class="error-text slds-m-top_medium">
+                            {error.body.message}
+                        </div>
+                    </div>
+                </lightning-card>
+            </div>
+        </lightning-layout>
+    </template>
+    <div class='qwil-container full-page' lwc:dom="manual"></div>
 </template>

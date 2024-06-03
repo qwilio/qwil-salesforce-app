@@ -16,14 +16,16 @@ export default class QwilEmbed extends LightningElement {
             this.retrieveCredentials(), // this populates either this.credentials or this.error
         ]);
         
+        const container = this.template.querySelector('div.qwil-container');
 
         if (this.error) {
+            container.classList.remove('full-page');
+            this.loaded = true;
             return;
         } 
 
         const { token, endpoint } = this.credentials;
 
-        const container = this.template.querySelector('div.qwil-container');
         this.api = new window.QwilApi({
             token,
             endpoint,
