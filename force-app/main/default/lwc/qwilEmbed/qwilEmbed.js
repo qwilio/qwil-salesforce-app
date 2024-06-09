@@ -72,7 +72,7 @@ export default class QwilEmbed extends LightningElement {
 
     async disconnectedCallback() {
         if (this.api) {
-            this.api.dispose();
+            this.api.destroy();
             this.api = null;
         }
     }
