@@ -32,6 +32,10 @@ export default class QwilEmbed extends LightningElement {
         this.api = new window.QwilApi({
             token,
             endpoint,
+            options: {
+                emitDownloads: true,  // handle downloads ourselves
+            },
+            appDomain: 'betasdk.qwil.io',
             targetElement: container,
             onLoad: (api) => {
                 console.log('Qwil login successful'); 
@@ -51,7 +55,10 @@ export default class QwilEmbed extends LightningElement {
                 // Display in-app error events as toast
                 api.on('app-error', ({message}) => {
                     this.showErrorToast(message);
-                })
+                });
+
+                // Downloads triggered from within the iFrame does not work on SF mobile, so we handle it here
+                api.on('download-request', ({filename, url}) => this.downloadFileFromUrl(url, filename));
             },
             // Handle error case where we have token from Apex call, but we fail to load Qwil using said token.
             onError: () => {
@@ -59,6 +66,15 @@ export default class QwilEmbed extends LightningElement {
                 this.loaded = true;
             },
         });
+    }
+
+    downloadFileFromUrl(url, filename) {
+        const element = document.createElement('a');
+        element.href = url;
+        element.download = filename;
+        document.body.appendChild(element);
+        element.click();
+        element.remove();
     }
 
     async retrieveCredentials() {
