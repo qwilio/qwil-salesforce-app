@@ -34,8 +34,8 @@ export default class QwilEmbed extends LightningElement {
             endpoint,
             options: {
                 emitDownloads: true,  // handle downloads ourselves
+                contactsTappable: true, // make contacts tappable, and emit click-on-contact event
             },
-            appDomain: 'betasdk.qwil.io',
             targetElement: container,
             onLoad: (api) => {
                 console.log('Qwil login successful'); 
@@ -50,6 +50,12 @@ export default class QwilEmbed extends LightningElement {
                         const { token, endpoint } = this.credentials;
                         api.reauthenticate({ token, endpoint });
                     }
+                });
+
+                // this only works if contactsTappable option is set
+                api.on('click-on-contact', (payload) => {
+                    // Crude example. But you can do a lot more with this, e.g. lookup associated salesforce contact and display in modal.
+                    this.showContactToast(payload);
                 });
 
                 // Display in-app error events as toast
@@ -99,6 +105,16 @@ export default class QwilEmbed extends LightningElement {
             message,
             mode: 'dismissable',
             variant: 'warning'
+        }, this);
+    }
+
+    showContactToast(payload) {
+        const message = 'Salesforce app received event with payload ' + JSON.stringify(payload);
+        Toast.show({
+            label: 'Qwil click-on-contact',
+            message,
+            mode: 'dismissable',
+            variant: 'success'
         }, this);
     }
 }
