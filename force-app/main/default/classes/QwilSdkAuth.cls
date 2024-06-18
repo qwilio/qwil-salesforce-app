@@ -6,10 +6,13 @@ public with sharing class QwilSdkAuth {
         
         'RF024' => 'Your Qwil account is currently inactive', // Qwil user is not currently active
         'RN900' => 'Qwil is currently disabled for this organisation', // Org is inactive in Qwil
+        'RN902' => 'Qwil is currently disabled for this organisation', // Org is frozen in Qwil
 
         'RB785' => 'Configuration error. Please contact your system admin.', // identifier or entity_user_xref_uuid not included in the API call
         'RF731' => 'Configuration error. Please contact your system admin.', // System API Key does not have permission to create SDK sessions
-        'RF841' => 'Configuration error. Please contact your system admin.' // Cannot set on-behalf-of-entity-uuid. Not Super API key
+        'RF841' => 'Configuration error. Please contact your system admin.', // Cannot set on-behalf-of-entity-uuid. Not Super API key
+
+        'RF888' => 'Qwil SDK is not enabled for this organisation.' // SDK feature not enabled
     };
 
     @AuraEnabled(cacheable=false)
