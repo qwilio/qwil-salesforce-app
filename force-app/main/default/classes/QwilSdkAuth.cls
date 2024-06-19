@@ -10,7 +10,10 @@ public with sharing class QwilSdkAuth {
 
         'RB785' => 'Configuration error. Please contact your system admin.', // identifier or entity_user_xref_uuid not included in the API call
         'RF731' => 'Configuration error. Please contact your system admin.', // System API Key does not have permission to create SDK sessions
+        'RF736' => 'Configuration error. Please contact your system admin.', // Super API Key requires on-behalf-of-entity-uuid header
         'RF841' => 'Configuration error. Please contact your system admin.', // Cannot set on-behalf-of-entity-uuid. Not Super API key
+        'RU001' => 'Configuration error. Please contact your system admin.', // System API Key or Secret invalid
+        'RU002' => 'Configuration error. Please contact your system admin.', // System API Key has been deactivated
 
         'RF888' => 'Qwil SDK is not enabled for this organisation.' // SDK feature not enabled
     };
@@ -29,7 +32,6 @@ public with sharing class QwilSdkAuth {
 
         Http http = new Http();
         HTTPResponse res = http.send(req);
-        System.debug(res.getBody());
         Map<String, Object> resultMap = (Map<String, Object>)JSON.deserializeUntyped(res.getBody());
         
         if (res.getStatusCode() == 200) {
