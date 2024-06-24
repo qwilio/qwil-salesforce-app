@@ -35,6 +35,7 @@ export default class QwilEmbed extends LightningElement {
             options: {
                 emitDownloads: true,  // handle downloads ourselves
                 contactsTappable: true, // make contacts tappable, and emit click-on-contact event
+                emitMeetingJoin: true, // handle opening window ourselfs since salesforce mobile app blocks iframe from doing so
             },
             targetElement: container,
             onLoad: (api) => {
@@ -65,6 +66,11 @@ export default class QwilEmbed extends LightningElement {
 
                 // Downloads triggered from within the iFrame does not work on SF mobile, so we handle it here
                 api.on('download-request', ({filename, url}) => this.downloadFileFromUrl(url, filename));
+
+                // Opening extrernal window from iFrame does not work on SF mobile, so we handle it here
+                api.on("meeting-join", ({ url }) => {
+                    window.open(url, '_blank')
+                });
             },
             // Handle error case where we have token from Apex call, but we fail to load Qwil using said token.
             onError: () => {
