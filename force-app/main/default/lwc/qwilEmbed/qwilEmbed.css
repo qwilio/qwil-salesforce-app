@@ -11,6 +11,10 @@ body, html {
     background-color: white;
 }
 
+.hidden {
+    display: none;
+}
+
 .error-text {
     color: #8a0303;
 }
