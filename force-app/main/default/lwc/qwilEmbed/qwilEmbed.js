@@ -3,6 +3,8 @@ import Toast from 'lightning/toast';
 import { loadScript } from "lightning/platformResourceLoader";
 import QwilApiLib from "@salesforce/resourceUrl/QwilApiLib";
 import authenticate from '@salesforce/apex/QwilSdkAuth.authenticate';
+import FORM_FACTOR from '@salesforce/client/formFactor';
+
 
 export default class QwilEmbed extends LightningElement {
     api;
@@ -28,14 +30,15 @@ export default class QwilEmbed extends LightningElement {
 
         // If no error, credentials should have been populated
         const { token, endpoint } = this.credentials;
+        const emitDownloads = !this.isRunningOnDesktop(); // on mobile downloads from iframe do not work so we handle on this end.
 
         this.api = new window.QwilApi({
             token,
             endpoint,
             options: {
-                emitDownloads: true,  // handle downloads ourselves
+                emitDownloads,
                 contactsTappable: true, // make contacts tappable, and emit click-on-contact event
-                emitMeetingJoin: true, // handle opening window ourselfs since salesforce mobile app blocks iframe from doing so
+                emitMeetingJoin: true, // handle opening window ourself since salesforce mobile app blocks iframe from doing so
             },
             targetElement: container,
             onLoad: (api) => {
@@ -76,6 +79,10 @@ export default class QwilEmbed extends LightningElement {
                 this.loaded = true;
             },
         });
+    }
+
+    isRunningOnDesktop() {
+        return FORM_FACTOR === 'Large';
     }
 
     downloadFileFromUrl(url, filename) {
