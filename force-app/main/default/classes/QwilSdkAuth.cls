@@ -24,11 +24,28 @@ public with sharing class QwilSdkAuth {
         string userId = UserInfo.getUserId();
         string jsonBody = '{"identifier": "' + userId + '"}';
 
+        //ADDED TO GET USER TYPE
+        String usersType = [SELECT UserType FROM User WHERE Id = :currentUserId LIMIT 1]?.UserType;
+
         HttpRequest req = new HttpRequest();
-        req.setEndpoint('callout:QwilSysApiSDKAuth');
-        req.setMethod('POST');
-        req.setHeader('Content-Type', 'application/json');
-        req.setBody(jsonBody);
+        if(usersType == 'Standard') {
+            req.setEndpoint('callout:QwilSysApiSDKAuth');
+            req.setMethod('POST');
+            req.setHeader('Content-Type', 'application/json');
+            req.setBody(jsonBody);
+        } else {
+            //IF EXTERNAL USER, USER CUSTOM METADATA INSTEAD (POSSIBLE ERROR HANDLING DESIRED HERE
+            QwilSDKAuthSettings__mdt settings = [SELECT endpoint__c, key__c, secret__c FROM QwilSDKAuthSettings__mdt LIMIT 1];
+            req.setEndpoint(settings?.endpoint__c ?? null);
+            req.setMethod('POST');
+            req.setHeader('Content-Type', 'application/json');
+            req.setHeader('X-SYS-API-KEY', settings?.key__c ?? null);
+            req.setHeader('X-SYS-API-KEY-SECRET', settings?.secret__c ?? null);
+            req.setBody(jsonBody);
+        }
+
+        
+       
 
         Http http = new Http();
         HTTPResponse res = http.send(req);
