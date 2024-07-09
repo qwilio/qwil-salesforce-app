@@ -45,8 +45,12 @@ It consists of the following elements:
        * URL: https://*.qwil.io
        * CSP Context: All
        * CSP Directives: select "frame-src" and "img-src"
-7. Create a Tab for Qwil
+7.  Add <region>.qwil.io to Remote Site Settings
+   * Under "Setup > Remote Site Settings", click "New Remote Site"
+       * Remote Site Name: Qwil
+       * Remote Site URL: https://<region>.qwil.io
+8. Create a Tab for Qwil
    * Under "Setup > Tabs", create a new "Lightning Component Tab".
    * Lightning Component: `c:Qwil`
-8. Add the Tab to app
+9. Add the Tab to app
    * Under "Setup > App Manager", add the tab to the desired project(s)
