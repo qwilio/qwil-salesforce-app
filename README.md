@@ -39,14 +39,18 @@ It consists of the following elements:
    * Under "Setup > Users > Profiles", for each profile that is allowed to use Qwil:
        * Select the profile
        * Edit "Enabled External Credential Pricipal Access" and add the External Credential created in previous steps
-6. Add *.qwil.io to Trusted URLs to avoid CSP issues
+6. Give profiles access to the Apex class
+   * Under "Setup > Users > Profiles", for each profile that is allowed to use Qwil:
+       * Select the profile
+       * Edit "Apex Class Access" and add the 'QwilSdkAuth' Apex class
+8. Add *.qwil.io to Trusted URLs to avoid CSP issues
    * Under "Setup > Trusted URLs", click "New Trusted URL"
        * Api Name: Qwil
        * URL: https://*.qwil.io
        * CSP Context: All
        * CSP Directives: select "frame-src" and "img-src"
-7. Create a Tab for Qwil
+9. Create a Tab for Qwil
    * Under "Setup > Tabs", create a new "Lightning Component Tab".
    * Lightning Component: `c:Qwil`
-8. Add the Tab to app
+10. Add the Tab to app
    * Under "Setup > App Manager", add the tab to the desired project(s)
