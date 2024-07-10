@@ -57,4 +57,5 @@ It consists of the following elements:
    * Under "Setup > Tabs", create a new "Lightning Component Tab".
    * Lightning Component: `c:Qwil`
 10. Add the Tab to app
-   * Under "Setup > App Manager", add the tab to the desired project(s)
+    * Under "Setup > App Manager", add the tab to the desired project(s)
+
