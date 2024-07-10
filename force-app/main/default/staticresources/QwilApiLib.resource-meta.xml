@@ -2,5 +2,5 @@
 <StaticResource xmlns="http://soap.sforce.com/2006/04/metadata">
     <cacheControl>Public</cacheControl>
     <contentType>application/javascript</contentType>
-    <description>qwil-iframe-api (version 0.2.2)</description>
+    <description>qwil-iframe-api (version 0.2.4)</description>
 </StaticResource>

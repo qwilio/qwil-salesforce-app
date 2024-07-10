@@ -43,6 +43,10 @@ It consists of the following elements:
    * Under "Setup > Users > Profiles", for each profile that is allowed to use Qwil:
        * Select the profile
        * Edit "Apex Class Access" and add the 'QwilSdkAuth' Apex class
+7. Give profiles access to the User External Credentials
+   * Under "Setup > Users > Profiles", for each profile that is allowed to use Qwil:
+       * Select the profile
+       * Edit "Object Settings" and add the READ access to the "User External Credentials" object.
 8. Add *.qwil.io to Trusted URLs to avoid CSP issues
    * Under "Setup > Trusted URLs", click "New Trusted URL"
        * Api Name: Qwil
