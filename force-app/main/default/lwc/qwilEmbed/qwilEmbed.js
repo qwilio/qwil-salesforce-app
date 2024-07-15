@@ -1,24 +1,63 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, api } from 'lwc';
 import Toast from 'lightning/toast';
 import { loadScript } from "lightning/platformResourceLoader";
 import QwilApiLib from "@salesforce/resourceUrl/QwilApiLib";
 import authenticate from '@salesforce/apex/QwilSdkAuth.authenticate';
 import FORM_FACTOR from '@salesforce/client/formFactor';
 
-
 export default class QwilEmbed extends LightningElement {
+    @api optionsPath;
+    @api optionsContactsTappable;
+    @api optionsImagePreview;
+    @api optionsPdfPreview;
+    @api optionsEmitDownloads;
+    @api optionsEmitMeetingJoin;
+    @api optionsChatListTitle;
+    @api optionsChatListLogo;
+    @api optionsEmitChatListBack;
+    @api optionsHideChatBack;
+    @api optionsThemeBubbleBgColour;
+    @api optionsThemeBubbleTextColour;
+    @api optionsThemeBubbleLinkColour;
+    @api optionsThemeBubbleBgColour2;
+    @api optionsThemeBubbleTextColour2;
+    @api optionsThemeBubbleLinkColour2;
+
     api;
     error;
     credentials;
     loaded = false;
 
+    get options() {
+        return {
+            path: this.optionsPath || '',
+            contactsTappable: this.optionsContactsTappable || false,
+            imagePreview: this.optionsImagePreview || true,
+            pdfPreview: this.optionsPdfPreview || true,
+            emitDownloads: this.optionsEmitDownloads || false,
+            emitMeetingJoin: this.optionsEmitMeetingJoin || false,
+            chatListTitle: this.optionsChatListTitle || '',
+            chatListLogo: this.optionsChatListLogo || '',
+            emitChatListBack: this.optionsEmitChatListBack || false,
+            hideChatBack: this.optionsHideChatBack || false,
+            theme: {
+                bubbleBgColour: this.optionsThemeBubbleBgColour || '',
+                bubbleTextColour: this.optionsThemeBubbleTextColour || '',
+                bubbleLinkColour: this.optionsThemeBubbleLinkColour || '',
+                bubbleBgColour2: this.optionsThemeBubbleBgColour2 || '',
+                bubbleTextColour2: this.optionsThemeBubbleTextColour2 || '',
+                bubbleLinkColour2: this.optionsThemeBubbleLinkColour2 || ''
+            }
+        };
+    }
 
     async connectedCallback() {
         await Promise.all([
             loadScript(this, QwilApiLib),  // this exposes api obj on window.QwilApi
             this.retrieveCredentials(), // this populates either this.credentials or this.error
         ]);
-        
+
+        console.log(QwilApiLib);
         const container = this.template.querySelector('div.qwil-container');
 
         // Handle case where we fail to get SDK token from Apex call
@@ -30,16 +69,12 @@ export default class QwilEmbed extends LightningElement {
 
         // If no error, credentials should have been populated
         const { token, endpoint } = this.credentials;
-        const emitDownloads = !this.isRunningOnDesktop(); // on mobile downloads from iframe do not work so we handle on this end.
+        this.options.emitDownloads = !this.isRunningOnDesktop(); // on mobile downloads from iframe do not work so we handle on this end.
 
-        this.api = new window.QwilApi({
+        this.api = new QwilApi({
             token,
             endpoint,
-            options: {
-                emitDownloads,
-                contactsTappable: true, // make contacts tappable, and emit click-on-contact event
-                emitMeetingJoin: true, // handle opening window ourself since salesforce mobile app blocks iframe from doing so
-            },
+            options: this.options,
             targetElement: container,
             onLoad: (api) => {
                 console.log('Qwil login successful'); 
