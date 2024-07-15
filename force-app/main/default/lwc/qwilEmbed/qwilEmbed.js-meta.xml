@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
-     <apiVersion>61.0</apiVersion>
+    <apiVersion>61.0</apiVersion>
     <isExposed>true</isExposed>
     <targets>
         <target>lightning__RecordPage</target>
         <target>lightning__AppPage</target>
         <target>lightning__HomePage</target>
-        <target>lightning__Tab</target>
         <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Default</target>
     </targets>
+    <targetConfigs>  
+        <targetConfig targets="lightning__HomePage,lightning__RecordPage,lightning__AppPage,lightningCommunity__Default">
+            <property name="optionsPath" type="String" label="Custom Path"/>
+            <property name="optionsContactsTappable" type="Boolean" default="false" label="Contacts Tappable"/>
+            <property name="optionsImagePreview" type="Boolean" default="true" label="Enable Image Preview"/>
+            <property name="optionsPdfPreview" type="Boolean" default="true" label="Enable PDF Preview"/>
+            <property name="optionsEmitDownloads" type="Boolean" default="false" label="Emit Download Events"/>
+            <property name="optionsEmitMeetingJoin" type="Boolean" default="false" label="Emit Meeting Join Events"/>
+            <property name="optionsChatListTitle" type="String" label="Chat List Title"/>
+            <property name="optionsChatListLogo" type="String" label="Chat List Logo URL"/>
+            <property name="optionsEmitChatListBack" type="Boolean" default="false" label="Emit Chat List Back Event"/>
+            <property name="optionsHideChatBack" type="Boolean" default="false" label="Hide Chat Back Button"/>
+            
+            <!-- options.theme object properties -->
+            <property name="optionsThemeBubbleBgColour" type="String" label="Own Message Bubble Background Colour"/>
+            <property name="optionsThemeBubbleTextColour" type="String" label="Own Message Bubble Text Colour"/>
+            <property name="optionsThemeBubbleLinkColour" type="String" label="Own Message Bubble Link Colour"/>
+            <property name="optionsThemeBubbleBgColour2" type="String" label="Other Message Bubble Background Colour"/>
+            <property name="optionsThemeBubbleTextColour2" type="String" label="Other Message Bubble Text Colour"/>
+            <property name="optionsThemeBubbleLinkColour2" type="String" label="Other Message Bubble Link Colour"/>
+        </targetConfig>
+    </targetConfigs>
 </LightningComponentBundle>
